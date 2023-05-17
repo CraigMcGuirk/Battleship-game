@@ -33,17 +33,8 @@ def check_winnings(columns, lines, bet, values):
 #  Needs to be fixed
 
 
-def get_slot_machine_spin():
-    symbol_count = {
-        "A": 2,
-        "B": 4,
-        "C": 6,
-        "D": 8
-    }
-    all_symbols = []
-    for symbol, symbol_count in symbols.items():
-        for _ in range(symbol_count):
-            all_symbols.append(symbol)
+def get_slot_machine_spin(symbols_list):
+    
 
     columns = []
     for _ in range(cols):
@@ -57,6 +48,22 @@ def get_slot_machine_spin():
         columns.append(column)
 
     return columns
+
+
+def get_symbols_list():
+
+    symbol_count = {
+        "A": 2,
+        "B": 4,
+        "C": 6,
+        "D": 8
+    }
+    all_symbols = []
+    for symbol, symbol_count in symbol_count.items():
+        #Multiplies symbol by symbol count.  
+        all_symbols.extend([symbol] * symbol_count)
+        # Google "initialize array in python" for better explanation.
+        return all_symbols
 
 
 def print_slot_machine(columns):
@@ -127,7 +134,7 @@ def get_bet():
 # 5
 
 
-def spin(balance):
+def spin(balance, symbols_list):
     lines = get_number_of_lines()
     while True:
         bet = get_bet()
@@ -143,7 +150,7 @@ def spin(balance):
         f"You are betting ${bet} on {lines} lines." 
         f"Total bet is equal to: ${total_bet}")
 
-    slots = get_slot_machine_spin()
+    slots = get_slot_machine_spin(symbols_list)
     print_slot_machine(slots)
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_value)
     print(f"You won ${winnings}.")
@@ -156,12 +163,13 @@ def spin(balance):
 
 def main():
     balance = deposit()
+    symbols_list = get_symbols_list()
     while True:
         print(f"Current balance is ${balance}")
         answer = input("Press enter to play (q to quit).")
         if answer == "q":
             break
-        balance += spin(balance)
+        balance += spin(balance, symbols_list)
 
     print(f"You left with ${balance}")
 
